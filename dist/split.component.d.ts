@@ -1,4 +1,7 @@
 import { ChangeDetectorRef, ElementRef, SimpleChanges, EventEmitter, Renderer, OnDestroy, OnChanges } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
 import { SplitAreaDirective } from './splitArea.directive';
 export interface IAreaData {
     component: SplitAreaDirective;
@@ -17,16 +20,21 @@ export declare class SplitComponent implements OnChanges, OnDestroy {
     height: number;
     gutterSize: number;
     disabled: boolean;
+    visibleTransition: boolean;
     dragStart: EventEmitter<number[]>;
     dragProgress: EventEmitter<number[]>;
     dragEnd: EventEmitter<number[]>;
-    readonly styleFlexDirection: string;
+    visibleTransitionEndInternal: Subject<number[]>;
+    visibleTransitionEnd: Observable<number[]>;
+    readonly styleFlexDirection: boolean;
+    readonly styleFlexDirectionStyle: string;
+    readonly dragging: boolean;
     readonly styleWidth: string;
     readonly styleHeight: string;
     private readonly visibleAreas;
     private readonly nbGutters;
+    areas: Array<IAreaData>;
     private minPercent;
-    private areas;
     private isDragging;
     private containerSize;
     private areaASize;
@@ -46,6 +54,6 @@ export declare class SplitComponent implements OnChanges, OnDestroy {
     private dragEvent(event, start, areaA, areaB);
     private drag(start, end, areaA, areaB);
     private stopDragging();
-    private notify(type);
+    notify(type: string): void;
     ngOnDestroy(): void;
 }
